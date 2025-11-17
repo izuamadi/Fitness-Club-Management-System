@@ -1,0 +1,3 @@
+# Project dependencies file
+# Lists all Python packages required for the application (e.g., FastAPI/Flask, SQLAlchemy, database drivers, etc.)
+# Used by pip to install all necessary dependencies
