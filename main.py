@@ -5,6 +5,7 @@ Coordinates all application components and serves as the entry point for running
 """
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from core.database import Base, engine
 from model import *
@@ -31,6 +32,15 @@ app = FastAPI(
     description="API for managing fitness center operations",
     version="1.0.0",
     lifespan=lifespan
+)
+
+# Add CORS middleware for frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # React dev server
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Health check endpoint
