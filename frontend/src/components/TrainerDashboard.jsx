@@ -35,6 +35,8 @@ function TrainerDashboard({ userId, onLogout }) {
 
   const handleAddAvailability = async (e) => {
     e.preventDefault()
+    setError('')
+    setSuccess('')
     try {
       const data = {
         start_time: new Date(availabilityForm.start_time).toISOString(),
@@ -45,7 +47,9 @@ function TrainerDashboard({ userId, onLogout }) {
       setAvailabilityForm({ start_time: '', end_time: '' })
       loadData()
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to add availability')
+      const errorMsg = err.response?.data?.detail || err.response?.data?.message || err.message || 'Failed to add availability'
+      setError(errorMsg)
+      setSuccess('')
     }
   }
 
@@ -80,12 +84,12 @@ function TrainerDashboard({ userId, onLogout }) {
         </div>
 
         {error && (
-          <div className="alert alert-error" onClick={() => setError('')}>
-            {error}
+          <div className="alert alert-error" style={{ cursor: 'pointer', fontWeight: '500' }} onClick={() => setError('')}>
+            <strong>Error:</strong> {error}
           </div>
         )}
         {success && (
-          <div className="alert alert-success" onClick={() => setSuccess('')}>
+          <div className="alert alert-success" style={{ cursor: 'pointer' }} onClick={() => setSuccess('')}>
             {success}
           </div>
         )}

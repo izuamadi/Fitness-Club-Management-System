@@ -46,48 +46,64 @@ function MemberDashboard({ userId, onLogout }) {
 
   const handleAddHealthMetric = async (e) => {
     e.preventDefault()
+    setError('')
+    setSuccess('')
     try {
       await memberAPI.createHealthMetric(userId, healthMetricForm)
       setSuccess('Health metric recorded successfully!')
       setHealthMetricForm({ weight: '', heart_rate: '', body_fat: '' })
       loadData()
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to record health metric')
+      const errorMsg = err.response?.data?.detail || err.response?.data?.message || err.message || 'Failed to record health metric'
+      setError(errorMsg)
+      setSuccess('')
     }
   }
 
   const handleAddFitnessGoal = async (e) => {
     e.preventDefault()
+    setError('')
+    setSuccess('')
     try {
       await memberAPI.createFitnessGoal(userId, fitnessGoalForm)
       setSuccess('Fitness goal created successfully!')
       setFitnessGoalForm({ goal_type: '', target_value: '', current_value: '', target_date: '' })
       loadData()
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to create fitness goal')
+      const errorMsg = err.response?.data?.detail || err.response?.data?.message || err.message || 'Failed to create fitness goal'
+      setError(errorMsg)
+      setSuccess('')
     }
   }
 
   const handleRegisterForClass = async (e) => {
     e.preventDefault()
+    setError('')
+    setSuccess('')
     try {
       await memberAPI.registerForClass(userId, parseInt(classId))
       setSuccess('Successfully registered for class!')
       setClassId('')
       loadData()
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to register for class')
+      const errorMsg = err.response?.data?.detail || err.response?.data?.message || err.message || 'Failed to register for class'
+      setError(errorMsg)
+      setSuccess('')
     }
   }
 
   const handleCancelRegistration = async (classId) => {
     if (window.confirm('Are you sure you want to cancel this registration?')) {
+      setError('')
+      setSuccess('')
       try {
         await memberAPI.cancelRegistration(userId, classId)
         setSuccess('Registration cancelled successfully!')
         loadData()
       } catch (err) {
-        setError(err.response?.data?.detail || 'Failed to cancel registration')
+        const errorMsg = err.response?.data?.detail || err.response?.data?.message || err.message || 'Failed to cancel registration'
+        setError(errorMsg)
+        setSuccess('')
       }
     }
   }
@@ -135,12 +151,12 @@ function MemberDashboard({ userId, onLogout }) {
         </div>
 
         {error && (
-          <div className="alert alert-error" onClick={() => setError('')}>
-            {error}
+          <div className="alert alert-error" style={{ cursor: 'pointer', fontWeight: '500' }} onClick={() => setError('')}>
+            <strong>Error:</strong> {error}
           </div>
         )}
         {success && (
-          <div className="alert alert-success" onClick={() => setSuccess('')}>
+          <div className="alert alert-success" style={{ cursor: 'pointer' }} onClick={() => setSuccess('')}>
             {success}
           </div>
         )}

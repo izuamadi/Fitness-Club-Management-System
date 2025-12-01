@@ -51,33 +51,44 @@ function AdminDashboard({ userId, onLogout }) {
 
   const handleCreateRoom = async (e) => {
     e.preventDefault()
+    setError('')
+    setSuccess('')
     try {
       await adminAPI.createRoom(roomForm)
       setSuccess('Room created successfully!')
       setRoomForm({ room_name: '', capacity: '', location: '', admin_id: userId })
       loadData()
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to create room')
+      const errorMsg = err.response?.data?.detail || err.response?.data?.message || err.message || 'Failed to create room'
+      setError(errorMsg)
+      setSuccess('')
     }
   }
 
   const handleCreateEquipment = async (e) => {
     e.preventDefault()
+    setError('')
+    setSuccess('')
     try {
       await adminAPI.createEquipment(equipmentForm)
       setSuccess('Equipment created successfully!')
       setEquipmentForm({ room_id: '', name: '', status: 'working' })
       loadData()
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to create equipment')
+      const errorMsg = err.response?.data?.detail || err.response?.data?.message || err.message || 'Failed to create equipment'
+      setError(errorMsg)
+      setSuccess('')
     }
   }
 
   const handleCreateClass = async (e) => {
     e.preventDefault()
+    setError('')
+    setSuccess('')
     try {
       const data = {
         ...classForm,
+        admin_id: userId,
         trainer_id: parseInt(classForm.trainer_id),
         room_id: parseInt(classForm.room_id),
         capacity: parseInt(classForm.capacity),
@@ -87,8 +98,11 @@ function AdminDashboard({ userId, onLogout }) {
       await adminAPI.createClass(data)
       setSuccess('Group class created successfully!')
       setClassForm({ class_name: '', trainer_id: '', room_id: '', start_time: '', end_time: '', capacity: '' })
+      loadData()
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to create class')
+      const errorMsg = err.response?.data?.detail || err.response?.data?.message || err.message || 'Failed to create class'
+      setError(errorMsg)
+      setSuccess('')
     }
   }
 
@@ -132,12 +146,12 @@ function AdminDashboard({ userId, onLogout }) {
         </div>
 
         {error && (
-          <div className="alert alert-error" onClick={() => setError('')}>
-            {error}
+          <div className="alert alert-error" style={{ cursor: 'pointer', fontWeight: '500' }} onClick={() => setError('')}>
+            <strong>Error:</strong> {error}
           </div>
         )}
         {success && (
-          <div className="alert alert-success" onClick={() => setSuccess('')}>
+          <div className="alert alert-success" style={{ cursor: 'pointer' }} onClick={() => setSuccess('')}>
             {success}
           </div>
         )}
