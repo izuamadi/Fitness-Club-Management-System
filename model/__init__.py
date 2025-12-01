@@ -13,11 +13,9 @@ from model.group_class import GroupClass
 from model.personal_training_session import PersonalTrainingSession
 from model.trainer_availability import TrainerAvailability
 from model.maintenance_record import MaintenanceRecord
-
-# TODO: Import these when implemented
-# from model.fitness_goal import FitnessGoal
-# from model.health_metric import HealthMetric
-# from model.class_registration import ClassRegistration
+from model.health_metric import HealthMetric
+from model.fitness_goal import FitnessGoal
+from model.class_registration import ClassRegistration
 
 __all__ = [
     "AdminStaff",
@@ -29,4 +27,7 @@ __all__ = [
     "PersonalTrainingSession",
     "TrainerAvailability",
     "MaintenanceRecord",
+    "HealthMetric",
+    "FitnessGoal",
+    "ClassRegistration",
 ]

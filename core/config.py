@@ -7,10 +7,15 @@ Separates configuration from code for different environments (dev, test, prod).
 from pydantic_settings import BaseSettings
 from typing import Optional
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
+# Try to load from project root first, then from env folder
+env_path = Path(__file__).resolve().parent.parent / ".env"
+if not env_path.exists():
+    env_path = Path(__file__).resolve().parent.parent / "env" / ".env"
+load_dotenv(env_path)
 
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
@@ -18,7 +23,7 @@ class Settings(BaseSettings):
     # Database Configuration
     DATABASE_HOST: str = os.getenv("DATABASE_HOST", "localhost")
     DATABASE_PORT: int = int(os.getenv("DATABASE_PORT", "5432"))
-    DATABASE_NAME: str = os.getenv("DATABASE_NAME", "fitness_center_db")
+    DATABASE_NAME: str = os.getenv("DATABASE_NAME", "3005-final")
     DATABASE_USER: str = os.getenv("DATABASE_USER", "postgres")
     DATABASE_PASSWORD: str = os.getenv("DATABASE_PASSWORD", "")
     
